@@ -843,6 +843,21 @@ export default class GooglePlacesAutocomplete extends Component {
 
     return null;
   };
+
+  _onSubmitEditing = (event) => {
+    if (this.props.onSubmitEditing) {
+      this.props.onSubmitEditing(event);
+
+      return true;
+    }
+
+    const {dataSource} = this.state;
+
+    if (dataSource.length > 0) {
+      this._onPress(dataSource[0]);
+    }
+  };
+
   render() {
     let {
       onFocus,
@@ -882,7 +897,7 @@ export default class GooglePlacesAutocomplete extends Component {
               ]}
               value={this.state.text}
               placeholder={this.props.placeholder}
-              onSubmitEditing={this.props.onSubmitEditing}
+              onSubmitEditing={this._onSubmitEditing}
               placeholderTextColor={this.props.placeholderTextColor}
               onFocus={
                 onFocus
@@ -993,7 +1008,7 @@ GooglePlacesAutocomplete.defaultProps = {
   numberOfLines: 1,
   onFail: () => {},
   onNotFound: () => {},
-  onSubmitEditing: () => {},
+  onSubmitEditing: null,
   onPress: () => {},
   onTimeout: () => console.warn('google places autocomplete: request timeout'),
   placeholder: 'Search',
